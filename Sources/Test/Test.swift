@@ -32,19 +32,29 @@ Example usage:
 public func Test(
     named name: String? = nil,
     tester: Tester = Tester(),
-    operation: (Tester) throws -> Void,
+    operation: @escaping (Tester) throws -> Void,
     lineNumber: Int = #line,
     functionName: String = #function,
     fileName: String = #file
 ) throws {
-    let result = t.suite(named: name) {
-        try operation(tester)
+    var result: Error?
+
+    let test: () -> Void = {
+        do {
+            try operation(tester)
+        } catch {
+            result = error
+        }
     }
 
-    guard result == true else {
+    t.suite(named: name) {
+        test()
+    }
+
+    if let result = result {
         let testName = name.map { "\($0) Test" } ?? "Test"
         throw TestError(
-            description: "\(testName) failed.",
+            description: "\(testName) failed. \(result.localizedDescription)",
             lineNumber: lineNumber,
             functionName: functionName,
             fileName: fileName
@@ -84,19 +94,29 @@ Example usage:
 public func Test(
     named name: String? = nil,
     tester: Tester = Tester(),
-    operation: (Tester) async throws -> Void,
+    operation: @escaping (Tester) async throws -> Void,
     lineNumber: Int = #line,
     functionName: String = #function,
     fileName: String = #file
 ) async throws {
-    let result = await t.suite(named: name) {
-        try await operation(tester)
+    var result: Error?
+
+    let test: () async -> Void = {
+        do {
+            try await operation(tester)
+        } catch {
+            result = error
+        }
     }
 
-    guard result == true else {
+    await t.suite(named: name) {
+        await test()
+    }
+
+    if let result = result {
         let testName = name.map { "\($0) Test" } ?? "Test"
         throw TestError(
-            description: "\(testName) failed.",
+            description: "\(testName) failed. \(result.localizedDescription)",
             lineNumber: lineNumber,
             functionName: functionName,
             fileName: fileName
