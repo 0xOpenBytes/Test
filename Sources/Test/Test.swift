@@ -32,23 +32,19 @@ Example usage:
 public func Test(
     named name: String? = nil,
     tester: Tester = Tester(),
-    operation: @escaping (Tester) throws -> Void,
+    operation: (Tester) throws -> Void,
     lineNumber: Int = #line,
     functionName: String = #function,
     fileName: String = #file
 ) throws {
     var result: Error?
 
-    let test: () -> Void = {
+    t.suite(named: name) {
         do {
             try operation(tester)
         } catch {
             result = error
         }
-    }
-
-    t.suite(named: name) {
-        test()
     }
 
     if let result = result {
@@ -94,23 +90,19 @@ Example usage:
 public func Test(
     named name: String? = nil,
     tester: Tester = Tester(),
-    operation: @escaping (Tester) async throws -> Void,
+    operation: (Tester) async throws -> Void,
     lineNumber: Int = #line,
     functionName: String = #function,
     fileName: String = #file
 ) async throws {
     var result: Error?
-
-    let test: () async -> Void = {
+    
+    await t.suite(named: name) {
         do {
             try await operation(tester)
         } catch {
             result = error
         }
-    }
-
-    await t.suite(named: name) {
-        await test()
     }
 
     if let result = result {
