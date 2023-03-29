@@ -37,14 +37,20 @@ public func Test(
     functionName: String = #function,
     fileName: String = #file
 ) throws {
-    let result = t.suite(named: name) {
-        try operation(tester)
+    var result: Error?
+
+    t.suite(named: name) {
+        do {
+            try operation(tester)
+        } catch {
+            result = error
+        }
     }
 
-    guard result == true else {
+    if let result = result {
         let testName = name.map { "\($0) Test" } ?? "Test"
         throw TestError(
-            description: "\(testName) failed.",
+            description: "\(testName) failed. \(result.localizedDescription)",
             lineNumber: lineNumber,
             functionName: functionName,
             fileName: fileName
@@ -89,14 +95,20 @@ public func Test(
     functionName: String = #function,
     fileName: String = #file
 ) async throws {
-    let result = await t.suite(named: name) {
-        try await operation(tester)
+    var result: Error?
+    
+    await t.suite(named: name) {
+        do {
+            try await operation(tester)
+        } catch {
+            result = error
+        }
     }
 
-    guard result == true else {
+    if let result = result {
         let testName = name.map { "\($0) Test" } ?? "Test"
         throw TestError(
-            description: "\(testName) failed.",
+            description: "\(testName) failed. \(result.localizedDescription)",
             lineNumber: lineNumber,
             functionName: functionName,
             fileName: fileName
