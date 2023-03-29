@@ -32,7 +32,7 @@ Example usage:
 public func Test(
     named name: String? = nil,
     tester: Tester = Tester(),
-    operation: (Tester) throws -> Void,
+    operation: @escaping (Tester) throws -> Void,
     lineNumber: Int = #line,
     functionName: String = #function,
     fileName: String = #file
@@ -90,13 +90,13 @@ Example usage:
 public func Test(
     named name: String? = nil,
     tester: Tester = Tester(),
-    operation: (Tester) async throws -> Void,
+    operation: @escaping (Tester) async throws -> Void,
     lineNumber: Int = #line,
     functionName: String = #function,
     fileName: String = #file
 ) async throws {
     var result: Error?
-    
+
     await t.suite(named: name) {
         do {
             try await operation(tester)
