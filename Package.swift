@@ -18,7 +18,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/0xOpenBytes/t", from: "1.0.0"),
-        .package(url: "https://github.com/0xLeif/Scribe", from: "1.3.0"),
+        .package(url: "https://github.com/0xLeif/Scribe", from: "2.0.0"),
         .package(url: "https://github.com/0xLeif/Plugin", from: "2.0.0")
     ],
     targets: [
