@@ -19,7 +19,7 @@ try await waiter.wait(
      for: \.object.property,
      duration: 5.0,
      interval: 0.1,
-     expecting: { value in value == expectedValue}
+     expecting: { value in value == expectedValue }
  )
 ```
 
