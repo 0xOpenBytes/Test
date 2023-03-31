@@ -1,9 +1,9 @@
 import Foundation
 
-public struct Waiter<Value: AnyObject>: Waitable {
-    public var value: Value
+public struct Waiter<Object: AnyObject>: Waitable {
+    public var object: Object
 
-    public init(_ value: Value) {
-        self.value = value
+    public init(_ object: Object) {
+        self.object = object
     }
 }

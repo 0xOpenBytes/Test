@@ -47,7 +47,7 @@ final class TestTests: XCTestCase {
         let waiter = Waiter(value)
 
         try await waiter.wait(
-            for: \.value.count,
+            for: \.object.count,
             expecting: 0
         )
 
@@ -60,7 +60,7 @@ final class TestTests: XCTestCase {
 
         XCTAssertEqual(value.count, 0)
 
-        try await waiter.wait(for: \.value.count, duration: 2, interval: 0.5, expecting: 1)
+        try await waiter.wait(for: \.object.count, duration: 2, interval: 0.5, expecting: 1)
 
         XCTAssertEqual(value.count, 1)
     }
